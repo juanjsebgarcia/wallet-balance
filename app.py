@@ -1,10 +1,10 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, redirect
 import logic
 app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return redirect("https://github.com/juanjsebgarcia/WalletBalance", code=302)
 
 @app.route('/balance/<wallet>')
 def showWalletBalance(wallet):
