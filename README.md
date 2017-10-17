@@ -6,7 +6,8 @@ Feel free to deploy this Flask application on your own servers, or use my hosted
 Currently the API uses the [infura.io](https://www.infura.io) mainnet Ethereum nodes for guaranteed uptime and stability.
 
 
-##Endpoints
+#Endpoints
+
 This documentation is a work in progress. The current endpoints are as follows
 
 **`GET /balance/<wallet>`**
