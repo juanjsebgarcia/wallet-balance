@@ -10,6 +10,7 @@ Currently the API uses the [infura.io](https://www.infura.io) mainnet Ethereum n
 This documentation is a work in progress. The current endpoints are as follows
 
 **`GET /balance/<wallet>`**
+
 Returns the current ETH value of that wallet.
 
 Example return:
@@ -17,7 +18,9 @@ Example return:
     0.01
 
 **`GET /balance/<token>/<wallet>`**
+
 Returns the current token value of that wallet.
+
 Token may be a ticker (eg ZRX) or a contract address.
 
 Example return:
@@ -26,7 +29,9 @@ Example return:
 
 
 **`GET /token/<token>`**
+
 Returns known information about the token in JSON encoding.
+
 Token may be a ticker (eg ZRX) or a contract address.
 
 Example return:
@@ -39,7 +44,9 @@ Example return:
 
 
 **`GET /token/<token>/<wallet>`**
+
 Returns wallet balance of the token and extra details in JSON encoding.
+
 Token may be a ticker (eg ZRX) or a contract address.
 
 Example return:
