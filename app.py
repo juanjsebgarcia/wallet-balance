@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-import tools
+import logic
 app = Flask(__name__)
 
 @app.route('/')
@@ -11,7 +11,7 @@ def showWalletBalance(wallet):
     '''
     Returns ETH balance of account
     '''
-    balance = tools.getETHBalance(wallet)
+    balance = logic.getETHBalance(wallet)
     if balance is not None:
         return jsonify(balance)
     else:
@@ -22,18 +22,29 @@ def showTokenBalance(token,wallet):
     '''
     Returns token balance for wallet
     '''
-    balance = tools.getTokenBalance(token, wallet)
+    balance = logic.getTokenBalance(token, wallet)
     if balance is not None:
         return jsonify(balance)
     else:
         return jsonify(None), 404
 
 @app.route('/token/<token>')
-def showToken(token):
+def showTokenInfo(token):
     '''
-    Returns token information
+    Returns known token information
     '''
-    info = tools.getTokenInfo(token)
+    info = logic.getTokenInfo(token)
+    if info is not None:
+        return jsonify(info)
+    else:
+        return jsonify(None), 404
+
+@app.route('/token/<token>/<address>')
+def showTokenWallet(token, address):
+    '''
+    Returns detailed token balance
+    '''
+    info = logic.getTokenBalanceDetail(token, address)
     if info is not None:
         return jsonify(info)
     else:

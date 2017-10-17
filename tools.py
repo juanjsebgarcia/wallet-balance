@@ -18,73 +18,46 @@ def loadContracts():
     	contracts = json.loads(file.read())
     return contracts
 
-def getTokenInfo(token):
+def decompressToken(token):
     '''
-    Return information about known tokens
+    Searches local database using known token data
     '''
-    try:
+    response = {}
+    response['address'] = None
+    response['symbol'] = None
+    response['decimal'] = None
+
+    #check if token is an address
+    if len(token) == 42 and token[:2] == '0x':
+        #check to see if we know the address
         for contract in loadContracts():
-            if contract['symbol'] == token:
-                info={}
-                info['ticker'] = contract['symbol']
-                info['address'] = contract['address']
-                info['decimal'] = contract['decimal']
-                return info
-        return None
-    except:
-        return None
+            if contract['address'] ==  token:
+                response['address'] = contract['address']
+                response['symbol'] = contract['symbol']
+                response['decimal'] = contract['decimal']
+                return response
+        #lookup failed, going in raw
+        response['address'] = token
+    else:
+    #Get contract params
+        for contract in loadContracts():
+            if contract['symbol'].upper() == token.upper():
+                response['address'] = contract['address']
+                response['symbol'] = contract['symbol']
+                response['decimal'] = contract['decimal']
+                return response
+    return response
 
+def makeABICall(address):
+    web3 = getWeb3()
+    #Generic ABI
+    abi = json.loads('[{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]')
+    token = web3.eth.contract(address, abi=abi)
+    return token
 
-def getTokenBalance(ticker_t, wallet_w):
-    '''
-    Return token balance for known tokens
-    '''
+def getBalance(decimal, token, wallet):
     try:
-        web3 = getWeb3()
-
-        #Handle ETH as non-token
-        if ticker_t == 'ETH':
-            return getETHBalance(wallet_w)
-
-        #check if ticker_t is address
-        if len(ticker_t) == 42 and ticker_t[:2] == '0x':
-            #check to see if we know the address
-            for contract in loadContracts():
-                if contract['address'] ==  ticker_t:
-                    address_t = contract['address']
-                    symbol_t = contract['symbol']
-                    decimal_t = contract['decimal']
-                    break
-            #lookup failed, going in raw
-            address_t = ticker_t
-        else:
-        #Get contract params
-            for contract in loadContracts():
-                if contract['symbol'].upper() == ticker_t.upper():
-                    address_t = contract['address']
-                    symbol_t = contract['symbol']
-                    decimal_t = contract['decimal']
-                    break
-
-        #Generic ABI
-        abi_t = json.loads('[{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]')
-        token = web3.eth.contract( address_t, abi=abi_t)
-
-        #Format for expected output, if decimal is known
-        try:
-            divisor = 10**decimal_t
-            balance = token.call().balanceOf(wallet_w) / divisor
-        except:
-            balance = token.call().balanceOf(wallet_w)
-
-        return balance
+        divisor = 10**decimal
+        return token.call().balanceOf(wallet) / divisor
     except:
-        return None
-    
-def getETHBalance(wallet):
-    try:
-        web3 = getWeb3()
-        raw = web3.eth.getBalance(wallet)
-        return raw/1000000000000000000
-    except:
-        return None
+        return token.call().balanceOf(wallet)
