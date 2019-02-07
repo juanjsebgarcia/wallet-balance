@@ -1,14 +1,14 @@
 # WalletBalance
 Wallet Balance is a fantastically simple yet powerful ERC20 token balance API.
 
-Feel free to deploy this Flask application on your own servers, or use my hosted version coming soon. Further optimisations are pending.
+Feel free to deploy this Flask application on your own servers.
 
 Currently the API uses the [infura.io](https://www.infura.io) mainnet Ethereum nodes for guaranteed uptime and stability.
 
 
 #Endpoints
 
-This documentation is a work in progress. The current endpoints are as follows
+The current endpoints are as follows
 
 **`GET /balance/<wallet>`**
 

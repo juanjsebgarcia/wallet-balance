@@ -1,5 +1,5 @@
 import tools
-import json
+
 
 def getETHBalance(wallet):
     '''
@@ -8,10 +8,11 @@ def getETHBalance(wallet):
     try:
         web3 = tools.getWeb3()
         wei = web3.eth.getBalance(wallet)
-        divisor = 10**18 #fixed divisor for Wei -> ETH
-        return wei/divisor
+        divisor = 10**18  # fixed divisor for Wei -> ETH
+        return wei / divisor
     except:
         return None
+
 
 def getTokenInfo(token):
     '''
@@ -22,25 +23,24 @@ def getTokenInfo(token):
     except:
         return None
 
+
 def getTokenBalance(token, wallet):
     '''
     Return token balance
     '''
-    web3 = tools.getWeb3()
-
-    #Handle ETH as non-token
+    # Handle ETH as non-token
     if token == 'ETH':
         return getETHBalance(wallet)
 
     details = tools.decompressToken(token)
     decimal = details['decimal']
-    address = details ['address']
-    symbol = details['symbol']
+    address = details['address']
 
     token = tools.makeABICall(address)
 
-    #Format for expected output, if decimal is known
+    # Format for expected output, if decimal is known
     return tools.getBalance(decimal, token, wallet)
+
 
 def getTokenBalanceDetail(token, wallet):
     '''
@@ -48,13 +48,13 @@ def getTokenBalanceDetail(token, wallet):
     '''
     web3 = tools.getWeb3()
 
-    #Handle ETH as non-token
+    # Handle ETH as non-token
     if token == 'ETH':
         return getETHBalance(wallet)
 
     decompressed = tools.decompressToken(token)
     decimal = decompressed['decimal']
-    address = decompressed ['address']
+    address = decompressed['address']
     symbol = decompressed['symbol']
 
     token = tools.makeABICall(address)

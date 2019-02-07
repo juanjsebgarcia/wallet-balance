@@ -2,9 +2,12 @@ from flask import Flask, jsonify, redirect
 import logic
 app = Flask(__name__)
 
+
 @app.route('/')
 def hello_world():
-    return redirect("https://github.com/juanjsebgarcia/WalletBalance", code=302)
+    return redirect(
+        'https://github.com/juanjsebgarcia/wallet-balance', code=302)
+
 
 @app.route('/balance/<wallet>')
 def showWalletBalance(wallet):
@@ -17,8 +20,9 @@ def showWalletBalance(wallet):
     else:
         return jsonify(None), 404
 
+
 @app.route('/balance/<token>/<wallet>')
-def showTokenBalance(token,wallet):
+def showTokenBalance(token, wallet):
     '''
     Returns token balance for wallet
     '''
@@ -27,6 +31,7 @@ def showTokenBalance(token,wallet):
         return jsonify(balance)
     else:
         return jsonify(None), 404
+
 
 @app.route('/token/<token>')
 def showTokenInfo(token):
@@ -38,6 +43,7 @@ def showTokenInfo(token):
         return jsonify(info)
     else:
         return jsonify(None), 404
+
 
 @app.route('/token/<token>/<address>')
 def showTokenWallet(token, address):
