@@ -1,3 +1,5 @@
+## ⚠️ This is very old code - may no longer work, and certainly not reflective on my coding standards now. ⚠️
+
 # WalletBalance
 Wallet Balance is a fantastically simple yet powerful ERC20 token balance API.
 
